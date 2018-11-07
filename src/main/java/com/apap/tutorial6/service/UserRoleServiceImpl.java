@@ -26,4 +26,10 @@ public class UserRoleServiceImpl implements UserRoleService{
 		return hashedPassword;
 	}
 
+	@Override
+	public UserRoleModel findUserByUsername(String username) {
+		// TODO Auto-generated method stub
+		return userDb.findByUsername(username);
+	}
+
 }

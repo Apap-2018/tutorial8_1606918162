@@ -20,5 +20,13 @@ public class UserRoleController {
 		userService.addUser(user);
 		return "home";
 	}
+	
+	@RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
+	private String updatePasswordSubmit(String username, String oldPassword, String newPassword) {
+		UserRoleModel user = userService.findUserByUsername(username);
+		user.setPassword(newPassword);
+		userService.addUser(user);
+		return "home";
+	}
 
 }
