@@ -2,6 +2,7 @@ package com.apap.tutorial6.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -22,10 +23,22 @@ public class UserRoleController {
 	}
 	
 	@RequestMapping(value = "/updatePassword", method = RequestMethod.POST)
-	private String updatePasswordSubmit(String username, String oldPassword, String newPassword) {
+	private String updatePasswordSubmit(String username, String oldPassword, String newPassword, String newPasswordConfirm, Model model) {
 		UserRoleModel user = userService.findUserByUsername(username);
-		user.setPassword(newPassword);
-		userService.addUser(user);
+
+		if (userService.isMatch(oldPassword, user.getPassword())) {
+			if (newPassword.equals(newPasswordConfirm)) {
+				user.setPassword(newPassword);
+				userService.addUser(user);
+				model.addAttribute("suksesUpdate", "Password berhasil diubah."); 
+			}
+			else {
+				model.addAttribute("gagalUpdate", "Konfirmasi Password Baru tidak sama dengan Password Baru");
+			}
+		}
+		else {
+			model.addAttribute("gagalUpdate", "Password lama salah.");
+		}
 		return "home";
 	}
 
